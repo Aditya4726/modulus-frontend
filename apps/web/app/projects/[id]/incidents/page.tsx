@@ -1,6 +1,11 @@
 import Link from "next/link";
 import { cookies } from "next/headers";
 
+/* Backend integration: server-rendered monitoring list uses
+ * GET /api/incidents?projectId=:id&limit=25 with optional status. Preserve the
+ * session Cookie header and return { success, data } with incident summary rows.
+ */
+
 interface Incident {
 	id: string;
 	title: string;

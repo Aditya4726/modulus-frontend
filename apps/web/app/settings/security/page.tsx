@@ -2,6 +2,11 @@
 import { useState } from "react";
 import { authClient } from "@/lib/auth-client";
 
+/* Backend integration: better-auth twoFactor.enable({ password, issuer }) starts
+ * enrollment and returns { method: "totp", totpURI, backupCodes }. Then
+ * twoFactor.verifyTotp({ code }) activates the factor and consumes the challenge.
+ */
+
 export default function SecuritySettingsPage() {
 	const [password, setPassword] = useState("");
 	const [qrUri, setQrUri] = useState<string | null>(null);

@@ -2,6 +2,11 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
+/* Backend integration: POST /api/github/install-callback receives
+ * { installationId, projectId } after GitHub App installation. Return
+ * { success, error } so the page can route to the project dashboard or show failure.
+ */
+
 export default function GitHubCallbackContent() {
 	const router = useRouter();
 	const searchParams = useSearchParams();

@@ -1,6 +1,11 @@
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 
+/* Backend integration: GET /api/incidents/:incidentId powers diagnosis and
+ * execution-trace monitoring. Return { success, data } with executions,
+ * diagnosis, reproductions, and fix; use HTTP 404 for a missing incident.
+ */
+
 interface IncidentDetail {
 	id: string;
 	title: string;
