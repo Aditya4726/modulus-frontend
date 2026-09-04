@@ -1,12 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
-import { apiFetch } from "../../../../lib/api-client";
 
-/* Backend integration: GET /api/dashboard/:projectId supplies the monitoring
- * summary consumed below: executionVolume, successRate, incidents, pullRequests,
- * and estimatedTimeSavedMinutes. Keep nullable rates as null when unavailable.
- */
-
+// dashboard state schema
 interface DashboardData {
 	executionVolume: number;
 	successRate: number | null;
@@ -23,8 +18,9 @@ export default function DashboardPage({ params }: { params: { id: string } }) {
 	const [data, setData] = useState<DashboardData | null>(null);
 
 	useEffect(() => {
-		apiFetch<DashboardData>(`/api/dashboard/${params.id}`)
-			.then((res) => res.success && res.data && setData(res.data));
+		fetch(`/api/dashboard/${params.id}`, { credentials: "include" })
+			.then((r) => r.json())
+			.then((res) => res.success && setData(res.data));
 	}, [params.id]);
 
 	if (!data) return <p className="mt-20 text-center">Loading…</p>;

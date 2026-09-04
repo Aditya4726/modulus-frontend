@@ -1,12 +1,6 @@
 "use client";
 
 import { use, useCallback, useEffect, useState } from "react";
-import { apiFetch } from "../../../../lib/api-client";
-
-/* Backend integration: GET /api/executions?projectId=:id&limit=25 accepts the
- * optional status and cursor query parameters. Return { success, data, nextCursor };
- * each row needs id, status, startedAt, endedAt, agent.name, and _count.toolCalls.
- */
 
 interface ExecutionRow {
 	id: string;
@@ -21,11 +15,19 @@ interface ExecutionRow {
 	};
 }
 
+const RANGE_OPTIONS = [
+	{ label: "Today", days: 1 },
+	{ label: "7D", days: 7 },
+	{ label: "30D", days: 30 },
+	{ label: "3M", days: 90 },
+];
+
 export default function ExecutionsPage({ params }: { params: Promise<{ id: string }>}) {
 	const { id } = use(params);
 
 	const [rows, setRows] = useState<ExecutionRow[]>([]);
 	const [status, setStatus] = useState("");
+	const [rangeDays, setRangeDays] = useState(30);
 	const [nextCursor, setNextCursor] = useState<string | null>(null);
 	const [loading, setLoading] = useState(false);
 
@@ -37,6 +39,7 @@ export default function ExecutionsPage({ params }: { params: Promise<{ id: strin
 				const query = new URLSearchParams({
 					projectId: id,
 					limit: "25",
+					rangeDays: String(rangeDays),
 				});
 
 				if (status) {
@@ -47,11 +50,14 @@ export default function ExecutionsPage({ params }: { params: Promise<{ id: strin
 					query.set("cursor", cursorOverride);
 				}
 
-				const data = await apiFetch<ExecutionRow[]>(`/api/executions?${query.toString()}`);
+				const res = await fetch(`/api/executions?${query.toString()}`, {
+					credentials: "include",
+				});
 
-				if (data.success && data.data) {
-					const items = data.data;
-					setRows((prev) => (append ? [...prev, ...items] : items));
+				const data = await res.json();
+
+				if (data.success) {
+					setRows((prev) => (append ? [...prev, ...data.data] : data.data));
 
 					setNextCursor(data.nextCursor ?? null);
 				}
@@ -59,7 +65,7 @@ export default function ExecutionsPage({ params }: { params: Promise<{ id: strin
 				setLoading(false);
 			}
 		},
-		[id, status],
+		[id, status, rangeDays],
 	);
 
 	useEffect(() => {
@@ -75,6 +81,21 @@ export default function ExecutionsPage({ params }: { params: Promise<{ id: strin
 			</p>
 
 			<div className="mb-4 flex items-center gap-2">
+				{RANGE_OPTIONS.map((option) => (
+					<button
+						key={option.label}
+						type="button"
+						onClick={() => setRangeDays(option.days)}
+						className={`rounded border px-3 py-1.5 text-sm ${
+							rangeDays === option.days
+								? "bg-black text-white"
+								: "bg-white text-gray-700"
+						}`}
+					>
+						{option.label}
+					</button>
+				))}
+
 				<select
 					value={status}
 					onChange={(e) => setStatus(e.target.value)}
