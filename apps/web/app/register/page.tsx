@@ -250,12 +250,14 @@ export default function RegisterPage() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState<string | null>(null);
+	const [notice, setNotice] = useState<string | null>(null);
 	const [loading, setLoading] = useState(false);
 	const router = useRouter();
 
 	async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault();
 		setError(null);
+		setNotice(null);
 		setLoading(true);
 
 		try {
@@ -263,6 +265,7 @@ export default function RegisterPage() {
 				name,
 				email,
 				password,
+				callbackURL: `${window.location.origin}/projects`,
 			});
 
 			if (error) {
@@ -272,7 +275,7 @@ export default function RegisterPage() {
 
 			const { data: sessionData } = await authClient.getSession();
 			if (!sessionData?.user) {
-				setError("Your account was created. Verify your email before opening your projects.");
+				setNotice("Account created. Check your email and confirm your address to open your projects.");
 				return;
 			}
 
@@ -391,6 +394,12 @@ export default function RegisterPage() {
 							{error && (
 								<p className="rounded-lg border border-rose-300/20 bg-rose-400/10 px-3 py-2 text-sm text-rose-200">
 									{error}
+								</p>
+							)}
+
+							{notice && (
+								<p className="rounded-lg border border-teal-300/20 bg-teal-300/10 px-3 py-2 text-sm text-teal-100">
+									{notice}
 								</p>
 							)}
 

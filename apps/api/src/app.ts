@@ -21,10 +21,15 @@ import { githubRouter } from "./routes/github";
 
 export const app = express();
 
+const configuredOrigins = (process.env.WEB_APP_URL ?? "")
+	.split(",")
+	.map((origin) => origin.trim())
+	.filter(Boolean);
+
 // CORS handling
 app.use(
 	cors({
-		origin: "http://localhost:3000",
+		origin: ["http://localhost:3000", ...configuredOrigins],
 		credentials: true,
 		methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
 		allowedHeaders: ["Content-Type", "Authorization"],
