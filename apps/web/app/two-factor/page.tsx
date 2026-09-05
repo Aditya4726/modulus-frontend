@@ -3,7 +3,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, KeyRound, LockKeyhole, ShieldCheck } from "lucide-react";
 import { authClient, useAuth } from "@/lib/auth-client";
-import { projectsApi } from "@/lib/api/projects";
 
 /** Renders the Better Auth two-factor verification step. */
 export default function TwoFactorPage() {
@@ -29,9 +28,8 @@ export default function TwoFactorPage() {
 			}
 
 			await refresh();
-			void projectsApi.list().then(() => {
-				router.push("/dashboard");
-			}).catch(() => router.push("/projects"));
+			router.push("/projects");
+			router.refresh();
 		} catch {
 			setError("Unable to verify your code. Please try again.");
 		} finally {

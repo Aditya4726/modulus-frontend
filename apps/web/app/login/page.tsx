@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { authClient, useAuth } from "@/lib/auth-client";
-import { projectsApi } from "@/lib/api/projects";
 
 // lucide-react v1 removed all brand/logo icons (GitHub included) — see
 // https://lucide.dev/guide/react/migration. Using a plain inline SVG instead
@@ -104,9 +103,8 @@ export default function LoginPage() {
         router.push("/two-factor");
         return;
       }
-      void projectsApi.list().then(() => {
-        router.push("/dashboard");
-      }).catch(() => router.push("/projects"));
+      router.push("/projects");
+      router.refresh();
     } catch {
       setError("Unable to sign in. Please try again.");
     } finally {
