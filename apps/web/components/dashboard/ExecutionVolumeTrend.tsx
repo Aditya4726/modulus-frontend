@@ -1,0 +1,7 @@
+"use client";
+
+import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+/** Renders the animated execution-volume area chart. */
+export function ExecutionVolumeTrend({ trend = [] }: { trend?: Array<{ date: string; count: number }> }) {
+	return <section className="rounded-xl border border-teal-100 bg-white p-6"><div className="flex items-center justify-between"><div><h2 className="font-semibold">Execution volume</h2><p className="mt-1 text-sm text-slate-500">Daily agent runs over the last 14 days</p></div><span className="font-mono text-xs text-teal-700">14 day trend</span></div><div className="mt-6 h-72">{trend.length ? <ResponsiveContainer><AreaChart data={trend}><defs><linearGradient id="executionFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#2dd4bf" stopOpacity={.4} /><stop offset="100%" stopColor="#2dd4bf" stopOpacity={0} /></linearGradient></defs><XAxis dataKey="date" tickFormatter={(value) => value.slice(5)} tickLine={false} axisLine={false} /><YAxis tickLine={false} axisLine={false} width={42} /><Tooltip labelFormatter={(value) => `Date: ${value}`} formatter={(value) => [value, "Executions"]} /><Area type="monotone" dataKey="count" stroke="#0f766e" strokeWidth={3} fill="url(#executionFill)" animationDuration={1200} /></AreaChart></ResponsiveContainer> : <div className="grid h-full place-items-center text-sm text-slate-500">No trend data yet</div>}</div></section>;
+}

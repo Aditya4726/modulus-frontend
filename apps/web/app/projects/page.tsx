@@ -1,130 +1,20 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import Link from "next/link";
+import { ProjectCard } from "../../components/projects/ProjectCard";
+import { useProject } from "../../hooks/useProject";
+import { EmptyState } from "../../components/shared/EmptyState";
+import { ErrorState } from "../../components/shared/ErrorState";
+import { LoadingSkeleton } from "../../components/shared/LoadingSkeleton";
 
-interface Project {
-	id: string;
-	name: string;
-	environment: string;
-}
-
+/** Renders the project collection with loading, error, and empty states. */
 export default function ProjectsPage() {
-	const [projects, setProjects] = useState<Project[]>([]);
-	const [name, setName] = useState("");
-	const [error, setError] = useState<string | null>(null);
-	const [loading, setLoading] = useState(false);
-
-	async function loadProjects() {
-		try {
-			const res = await fetch("/api/projects", {
-				credentials: "include",
-			});
-
-			const data = await res.json();
-
-			if (data.success) {
-				setProjects(data.data);
-			}
-		} catch {
-			setError("Failed to load projects.");
-		}
-	}
-
-	useEffect(() => {
-		void loadProjects();
-	}, []);
-
-	async function createProject(e: React.SubmitEvent<HTMLFormElement>) {
-		e.preventDefault();
-
-		if (!name.trim()) {
-			setError("Project name is required.");
-			return;
-		}
-
-		setError(null);
-		setLoading(true);
-
-		try {
-			const meRes = await fetch("/api/me", {
-				credentials: "include",
-			});
-
-			const me = await meRes.json();
-
-			const organizationId = me.data?.organizations?.[0]?.id;
-
-			if (!me.success || !organizationId) {
-				setError("Unable to find your organization.");
-				return;
-			}
-
-			const res = await fetch("/api/projects", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				credentials: "include",
-				body: JSON.stringify({
-					name: name.trim(),
-					organizationId,
-				}),
-			});
-
-			const data = await res.json();
-
-			if (!data.success) {
-				setError(data.error?.message ?? "Failed to create project.");
-				return;
-			}
-
-			setName("");
-			await loadProjects();
-		} catch {
-			setError("Something went wrong. Please try again.");
-		} finally {
-			setLoading(false);
-		}
-	}
+	const { projects, error, loading } = useProject();
+	if (loading) return <LoadingSkeleton />;
+	if (error) return <ErrorState message={error.message} onRetry={() => window.location.reload()} />;
+	if (!projects.length) return <main className="hero-shell p-8"><EmptyState title="No projects yet" message="Create your first project to begin." /></main>;
 
 	return (
-		<div className="max-w-lg mx-auto mt-20">
-			<h1 className="text-xl font-semibold mb-4">Projects</h1>
-
-			<form onSubmit={createProject} className="flex gap-2 mb-3">
-				<input
-					className="border p-2 rounded flex-1"
-					placeholder="Project name"
-					value={name}
-					onChange={(e) => setName(e.target.value)}
-					disabled={loading}
-				/>
-
-				<button
-					className="bg-black text-white px-4 rounded disabled:opacity-50"
-					type="submit"
-					disabled={loading}
-				>
-					{loading ? "Creating..." : "Create"}
-				</button>
-			</form>
-
-			{error && <p className="text-red-600 text-sm mb-4">{error}</p>}
-
-			<ul className="flex flex-col gap-2">
-				{projects.map((project) => (
-					<li key={project.id} className="border p-3 rounded">
-						{project.name}{" "}
-						<span className="text-gray-500">({project.environment})</span>
-					</li>
-				))}
-			</ul>
-
-			{projects.length === 0 && (
-				<p className="text-gray-500 text-sm">
-					No projects yet. Create your first project.
-				</p>
-			)}
-		</div>
+		<main className="hero-shell px-6 py-10 sm:px-10 lg:px-16"><div className="mx-auto max-w-6xl hero-reveal"><div className="flex flex-wrap items-end justify-between gap-4"><div><p className="font-mono text-xs font-semibold uppercase tracking-[0.18em] text-[#2DD4BF]">Workspace</p><h1 className="mt-2 text-4xl font-semibold tracking-tight text-[#EAF6F3]">Your projects</h1><p className="mt-2 text-sm text-[#8FA39E]">Choose a project to open its reliability dashboard.</p></div><Link href="/projects/new" className="hero-hover rounded-lg bg-[#2DD4BF] px-4 py-2 text-sm font-semibold text-black shadow-[0_0_18px_rgba(45,212,191,.2)] hover:bg-[#5EEAD4]">New project</Link></div><div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{projects.map((project) => <ProjectCard key={project.id} project={project} />)}</div></div></main>
 	);
 }

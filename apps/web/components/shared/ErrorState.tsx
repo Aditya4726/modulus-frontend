@@ -1,0 +1,4 @@
+/** Renders a retryable error state for failed data requests. */
+export function ErrorState({ message, onRetry }: { message: string; onRetry: () => void }) {
+	return <main className="hero-shell grid min-h-[70vh] place-items-center p-8"><div className="hero-panel hero-reveal max-w-md p-7 text-center"><h2 className="text-lg font-semibold text-[#EAF6F3]">Dashboard unavailable</h2><p className="mt-2 text-sm text-[#8FA39E]">{message}</p><button type="button" onClick={onRetry} className="hero-hover mt-5 rounded-lg bg-[#2DD4BF] px-4 py-2 text-sm font-semibold text-black hover:bg-[#5EEAD4]">Try again</button></div></main>;
+}

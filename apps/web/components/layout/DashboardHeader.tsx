@@ -1,0 +1,7 @@
+"use client";
+
+import { Bell, BookOpen, CircleHelp, Search } from "lucide-react";
+/** Renders the dark dashboard title, search, and utility header. */
+export function DashboardHeader() {
+	return <header className="flex flex-wrap items-center justify-between gap-5 border-b border-white/10 bg-[#0d0d15] px-6 py-5 lg:px-8"><div><h1 className="text-2xl font-semibold text-white">Dashboard</h1><p className="mt-1 text-sm text-slate-500">Overview of your AI agent system reliability</p></div><div className="order-3 flex w-full items-center rounded-lg border border-white/10 bg-white/4 px-3 py-2 md:order-2 md:w-72"><Search className="h-4 w-4 text-slate-500" /><input className="ml-2 w-full bg-transparent text-sm text-white outline-none placeholder:text-slate-600" placeholder="Search anything..." /><kbd className="hidden rounded border border-white/10 px-1.5 py-0.5 text-[10px] text-slate-500 sm:block">⌘K</kbd></div><div className="order-2 flex items-center gap-4 text-slate-400 md:order-3"><span className="relative"><Bell className="h-5 w-5" /><b className="absolute -right-2 -top-2 grid h-4 w-4 place-items-center rounded-full bg-rose-500 text-[9px] text-white">3</b></span><BookOpen className="h-5 w-5" /><CircleHelp className="h-5 w-5" /><span className="grid h-8 w-8 place-items-center rounded-full bg-violet-500 text-xs font-semibold text-white">AS</span></div></header>;
+}

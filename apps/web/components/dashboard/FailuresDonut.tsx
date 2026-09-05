@@ -1,0 +1,7 @@
+"use client";
+import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
+import type { DashboardMetrics } from "../../types/dashboard";
+/** Renders the failure-category donut and percentage legend. */
+export function FailuresDonut({ categories = [] }: { categories?: DashboardMetrics["failureCategories"] }) {
+	return <section className="rounded-2xl border border-white/10 bg-[#13131d] p-5"><h2 className="font-semibold text-white">Failures by Category</h2>{categories?.length ? <div className="mt-3 flex items-center gap-3"><div className="h-40 w-40"><ResponsiveContainer><PieChart><Pie data={categories} dataKey="percentage" innerRadius="58%" outerRadius="88%" paddingAngle={2} animationDuration={900}>{categories.map((item) => <Cell key={item.name} fill={item.color} />)}</Pie></PieChart></ResponsiveContainer></div><div className="flex-1 space-y-2 text-xs">{categories.map((item) => <div key={item.name} className="flex justify-between text-slate-400"><span><i className="mr-2 inline-block h-2 w-2 rounded-full" style={{ background: item.color }} />{item.name}</span><b className="text-slate-200">{item.percentage}%</b></div>)}</div></div> : <p className="py-20 text-center text-sm text-slate-500">— Failure categories not returned</p>}</section>;
+}

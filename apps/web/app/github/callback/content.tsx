@@ -1,7 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { installCallback } from "../../../lib/api/github";
 
+/** Processes GitHub installation query parameters and completes the callback. */
 export default function GitHubCallbackContent() {
 	const router = useRouter();
 	const searchParams = useSearchParams();
@@ -11,24 +13,14 @@ export default function GitHubCallbackContent() {
 		const installationId = searchParams.get("installation_id");
 		const projectId = searchParams.get("state");
 		if (!installationId || !projectId) {
+			// eslint-disable-next-line react-hooks/set-state-in-effect
 			setError("Missing installation details");
 			return;
 		}
 
-		fetch("/api/github/install-callback", {
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			credentials: "include",
-			body: JSON.stringify({
-				installationId: Number(installationId),
-				projectId,
-			}),
-		})
-			.then((r) => r.json())
-			.then((data) => {
-				if (data.success) router.push(`/projects/${projectId}/dashboard`);
-				else setError(data.error?.message ?? "Failed to link installation");
-			});
+		installCallback(projectId, Number(installationId))
+			.then(() => router.push(`/projects/${projectId}/settings/github`))
+			.catch((reason: unknown) => setError(reason instanceof Error ? reason.message : "Failed to link installation"));
 	}, [searchParams, router]);
 
 	return (

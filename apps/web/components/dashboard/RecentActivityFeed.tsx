@@ -1,0 +1,7 @@
+import { CheckCircle2, GitBranch, Rocket, Sparkles, User } from "lucide-react";
+import type { DashboardMetrics } from "../../types/dashboard";
+/** Renders the chronological dashboard activity feed. */
+export function RecentActivityFeed({ activity = [] }: { activity?: DashboardMetrics["activity"] }) {
+	const icons = { fix: Sparkles, pr: GitBranch, check: CheckCircle2, deploy: Rocket, user: User };
+	return <section className="rounded-2xl border border-white/10 bg-[#13131d] p-5"><div className="flex justify-between"><h2 className="font-semibold text-white">Recent Activity</h2><span className="text-xs text-slate-600">—</span></div><div className="mt-4 space-y-4">{activity?.length ? activity.map((item) => { const Icon = icons[item.type as keyof typeof icons] ?? Sparkles; return <div key={`${item.text}-${item.time}`} className="flex items-center gap-3"><span className="grid h-7 w-7 place-items-center rounded-lg bg-teal-300/10 text-teal-300"><Icon className="h-3.5 w-3.5" /></span><span className="flex-1 text-xs text-slate-300">{item.text}</span><time className="text-[10px] text-slate-500">{item.time}</time></div>; }) : <p className="py-20 text-center text-sm text-slate-500">— Activity not returned</p>}</div></section>;
+}
