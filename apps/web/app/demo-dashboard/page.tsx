@@ -1,14 +1,14 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { DashboardHeader } from "../../components/layout/DashboardHeader";
-import { Sidebar } from "../../components/layout/Sidebar";
-import { AgentHealthList } from "../../components/dashboard/AgentHealthList";
-import { ActiveIncidentsList } from "../../components/dashboard/ActiveIncidentsList";
-import { FailuresDonut } from "../../components/dashboard/FailuresDonut";
-import { RecentActivityFeed } from "../../components/dashboard/RecentActivityFeed";
-import { ReliabilityChart } from "../../components/dashboard/ReliabilityChart";
-import { StatCard } from "../../components/dashboard/StatCard";
+import { DashboardHeader } from "../../../components/layout/DashboardHeader";
+import { Sidebar } from "../../../components/layout/Sidebar";
+import { AgentHealthList } from "../../../components/dashboard/AgentHealthList";
+import { ActiveIncidentsList } from "../../../components/dashboard/ActiveIncidentsList";
+import { FailuresDonut } from "../../../components/dashboard/FailuresDonut";
+import { RecentActivityFeed } from "../../../components/dashboard/RecentActivityFeed";
+import { ReliabilityChart } from "../../../components/dashboard/ReliabilityChart";
+import { StatCard } from "../../../components/dashboard/StatCard";
 
 const demoStats = [
 	{ key: "reliability", label: "Reliability Score", value: "99.92%", detail: "0.48% vs last 7 days" },
@@ -20,13 +20,13 @@ const demoStats = [
 ];
 
 const demoReliability = [
-	{ date: "May 12", value: 99.3 },
-	{ date: "May 13", value: 99.7 },
-	{ date: "May 14", value: 99.5 },
-	{ date: "May 15", value: 99.9 },
-	{ date: "May 16", value: 99.8 },
-	{ date: "May 17", value: 99.95 },
-	{ date: "May 18", value: 99.92 },
+	{ date: "Aug 30", value: 85.7 },
+	{ date: "Aug 31", value: 79.5 },
+	{ date: "Sep 1", value: 21.9 },
+	{ date: "Sep 2", value: 99.8 },
+	{ date: "Sep 3", value: 72.95 },
+	{ date: "Sep 4", value: 93.92 },
+	{ date: "Sep 5", value: 91.42 },
 ];
 
 const demoIncidents = [
@@ -57,7 +57,7 @@ const demoActivity = [
 	{ type: "pr", text: "Pull request #128 created", time: "12m ago" },
 	{ type: "check", text: "Tool Execution Failure auto-resolved", time: "28m ago" },
 	{ type: "deploy", text: "Agent Platform deployed to production", time: "1h ago" },
-	{ type: "user", text: "Aditya assigned Research Agent", time: "2h ago" },
+	{ type: "user", text: "User assigned Research Agent", time: "2h ago" },
 ];
 
 /** Renders a backend-independent dashboard preview for demonstrations. */
