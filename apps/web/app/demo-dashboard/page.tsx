@@ -1,14 +1,14 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { DashboardHeader } from "../../../components/layout/DashboardHeader";
-import { Sidebar } from "../../../components/layout/Sidebar";
-import { AgentHealthList } from "../../../components/dashboard/AgentHealthList";
-import { ActiveIncidentsList } from "../../../components/dashboard/ActiveIncidentsList";
-import { FailuresDonut } from "../../../components/dashboard/FailuresDonut";
-import { RecentActivityFeed } from "../../../components/dashboard/RecentActivityFeed";
-import { ReliabilityChart } from "../../../components/dashboard/ReliabilityChart";
-import { StatCard } from "../../../components/dashboard/StatCard";
+import { DashboardHeader } from "../../components/layout/DashboardHeader";
+import { Sidebar } from "../../components/layout/Sidebar";
+import { AgentHealthList } from "../../components/dashboard/AgentHealthList";
+import { ActiveIncidentsList } from "../../components/dashboard/ActiveIncidentsList";
+import { FailuresDonut } from "../../components/dashboard/FailuresDonut";
+import { RecentActivityFeed } from "../../components/dashboard/RecentActivityFeed";
+import { ReliabilityChart } from "../../components/dashboard/ReliabilityChart";
+import { StatCard } from "../../components/dashboard/StatCard";
 
 const demoStats = [
 	{ key: "reliability", label: "Reliability Score", value: "99.92%", detail: "0.48% vs last 7 days" },
